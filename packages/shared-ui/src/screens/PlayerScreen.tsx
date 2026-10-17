@@ -30,6 +30,11 @@ export default function PlayerScreen() {
   const currentTimeRef = useRef<number>(0);
   const durationRef = useRef<number>(0);
 
+  // Keep the ref in sync with playback so remote seeks start from the playhead
+  useEffect(() => {
+    currentTimeRef.current = currentTime;
+  }, [currentTime]);
+
   const showControls = useCallback(() => {
     setControlsVisible(true);
 
@@ -64,11 +69,11 @@ export default function PlayerScreen() {
     const handleKeyDown = (key: SupportedKeys) => {
       switch (key) {
         case SupportedKeys.Right:
-        case SupportedKeys.Rewind:
+        case SupportedKeys.FastForward:
           seek(currentTimeRef.current + 10);
           break;
         case SupportedKeys.Left:
-        case SupportedKeys.FastForward:
+        case SupportedKeys.Rewind:
           seek(currentTimeRef.current - 10);
           break;
         case SupportedKeys.Back:
